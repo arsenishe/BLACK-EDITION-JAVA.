@@ -26,6 +26,9 @@ jobs:
           ls -la
           ls -la NoBlocklist || true
 
+      - name: Download NoBlocklist
+        run: git clone https://github.com/MojoLauncher/NoBlocklist.git NoBlocklist
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:

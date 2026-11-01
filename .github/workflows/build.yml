@@ -41,8 +41,18 @@ jobs:
       - name: Build APK
         run: ./gradlew :Hyper_Launcher_v3:assembleDebug
 
+      - name: Rename APK
+        run: |
+          APK=$(find Hyper_Launcher_v3/build/outputs/apk -type f -name '*.apk' -print -quit)
+          if [ -z "$APK" ]; then
+            echo "APK not found!"
+            exit 1
+          fi
+          mkdir -p dist
+          cp "$APK" dist/BLACK-EDITION-JAVA.apk
+
       - name: Save APK
         uses: actions/upload-artifact@v4
         with:
           name: BLACK-EDITION-APK
-          path: '**/*.apk'
+          path: dist/BLACK-EDITION-JAVA.apk

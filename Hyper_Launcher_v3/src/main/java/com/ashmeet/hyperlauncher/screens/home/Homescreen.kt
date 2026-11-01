@@ -1,8 +1,8 @@
+```kotlin
 package com.ashmeet.hyperlauncher.screens.home
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,7 +32,6 @@ import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Folder
@@ -58,11 +57,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -109,11 +108,14 @@ fun MainMenuFragmentCompose(
 ) {
     val context = LocalContext.current
     val isPreview = LocalInspectionMode.current
+
     var launcherBgPath by remember {
         mutableStateOf(LauncherPreferences.PREF_LAUNCHER_BACKGROUND_PATH)
     }
+
     val hasBackground = launcherBgPath != null
     val backgroundTransparency = if (hasBackground) 0.5f else 1f
+
     var hideActionButtons by remember {
         mutableStateOf(LauncherPreferences.PREF_HIDE_SIDEBAR)
     }
@@ -136,10 +138,12 @@ fun MainMenuFragmentCompose(
                     hideActionButtons =
                         LauncherPreferences.prefs.getBoolean("hide_sidebar", false)
                 }
+
                 if (key == "launcher_background_path") {
                     launcherBgPath =
                         LauncherPreferences.prefs.getString("launcher_background_path", null)
                 }
+
                 if (key == LauncherPreferences.PREF_KEY_CURRENT_INSTANCE) {
                     selectedInstance = try {
                         Instances.loadSelectedInstance()
@@ -148,7 +152,9 @@ fun MainMenuFragmentCompose(
                     }
                 }
             }
+
             LauncherPreferences.prefs.registerOnSharedPreferenceChangeListener(listener)
+
             onDispose {
                 LauncherPreferences.prefs.unregisterOnSharedPreferenceChangeListener(listener)
             }
@@ -162,6 +168,7 @@ fun MainMenuFragmentCompose(
             } catch (_: Exception) {
                 null
             }
+
             if (selectedInstance != instance) {
                 selectedInstance = instance
             }
@@ -205,6 +212,7 @@ fun MainMenuFragmentCompose(
 
     val headInteractionSource = remember { MutableInteractionSource() }
     val isHeadPressed by headInteractionSource.collectIsPressedAsState()
+
     val headScale by animateFloatAsState(
         targetValue = if (isHeadPressed) 0.92f else 1f,
         animationSpec = spring(
@@ -355,27 +363,23 @@ private fun ActionCardsContent(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             ActionCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(R.string.home_about)),
                 icon = Icons.Rounded.Info,
                 position = CardPosition.TOP,
                 onClick = onAboutClick
             )
+
             ActionCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(id = R.string.mcl_button_social_media)),
                 icon = Icons.Rounded.Share,
                 position = CardPosition.MIDDLE,
                 onClick = onSocialMediaClick
             )
+
             ActionCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(id = R.string.mcl_option_customcontrol)),
                 icon = Icons.Rounded.Build,
                 position = CardPosition.MIDDLE,
@@ -384,27 +388,23 @@ private fun ActionCardsContent(
 
             if (isPortrait) {
                 ActionCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
+                    modifier = Modifier.fillMaxWidth().height(60.dp),
                     title = translatedText(stringResource(R.string.home_content_installer)),
                     icon = Icons.Rounded.Download,
                     position = CardPosition.MIDDLE,
                     onClick = onContentInstallerClick
                 )
+
                 ActionCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
+                    modifier = Modifier.fillMaxWidth().height(60.dp),
                     title = translatedText(stringResource(R.string.home_instance_directory)),
                     icon = Icons.Rounded.Folder,
                     position = CardPosition.MIDDLE,
                     onClick = onInstanceDirectoryClick
                 )
+
                 ActionCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp),
+                    modifier = Modifier.fillMaxWidth().height(60.dp),
                     title = translatedText(stringResource(R.string.home_recordings_gallery)),
                     icon = Icons.Rounded.Videocam,
                     position = CardPosition.MIDDLE,
@@ -413,27 +413,23 @@ private fun ActionCardsContent(
             }
 
             ActionCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(id = R.string.main_install_jar_file)),
                 icon = Icons.Rounded.Add,
                 position = CardPosition.MIDDLE,
                 onClick = onInstallJarClick
             )
+
             ActionCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(id = R.string.main_share_logs)),
                 icon = Icons.AutoMirrored.Rounded.Send,
                 position = CardPosition.MIDDLE,
                 onClick = onShareLogsClick
             )
+
             ActionCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
+                modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(id = R.string.mcl_button_open_directory)),
                 icon = Icons.Rounded.Search,
                 position = CardPosition.BOTTOM,
@@ -468,7 +464,7 @@ private fun SidebarCardContent(
         } else {
             MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
         },
-        tonalElevation = 0.dp,
+        tonalElevation = 0.dp
     ) {
         Column(
             modifier = (if (showHead) Modifier.fillMaxSize() else Modifier.fillMaxWidth())
@@ -476,61 +472,24 @@ private fun SidebarCardContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
-            // Логотип BLACK EDITION JAVA
-            Image(
-                painter = painterResource(id = R.drawable.black_edition_logo),
-                contentDescription = "BLACK EDITION JAVA",
+            // Логотип BLACK EDITION JAVA вместо аватара.
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(110.dp),
-                contentScale = ContentScale.Fit
-            )
-
-            if (showHead) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(64.dp)
-                            .scale(headScale)
-                            .clickable(
-                                interactionSource = headInteractionSource,
-                                indication = null,
-                                onClick = onAccountManagerClick
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        if (currentAccount != null) {
-                            if (skinHead != null) {
-                                Image(
-                                    bitmap = skinHead.asImageBitmap(),
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Fit,
-                                    filterQuality = FilterQuality.None
-                                )
-                            } else {
-                                LoadingIndicator(
-                                    modifier = Modifier.size(42.dp),
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
-                                )
-                            }
-                        } else {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = translatedText(
-                                    stringResource(R.string.home_add_account)
-                                ),
-                                modifier = Modifier.size(32.dp),
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
-                }
+                    .size(width = 110.dp, height = 110.dp)
+                    .scale(headScale)
+                    .clickable(
+                        interactionSource = headInteractionSource,
+                        indication = null,
+                        onClick = onAccountManagerClick
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.black_edition_logo),
+                    contentDescription = "BLACK EDITION JAVA",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
             }
 
             Surface(
@@ -540,13 +499,12 @@ private fun SidebarCardContent(
                 contentColor = MaterialTheme.colorScheme.onSurface
             ) {
                 Row(
-                    modifier = Modifier
-                        .padding(
-                            start = 12.dp,
-                            end = 6.dp,
-                            top = 6.dp,
-                            bottom = 6.dp
-                        ),
+                    modifier = Modifier.padding(
+                        start = 12.dp,
+                        end = 6.dp,
+                        top = 6.dp,
+                        bottom = 6.dp
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -584,6 +542,7 @@ private fun SidebarCardContent(
 
                         Column(modifier = Modifier.weight(1f)) {
                             val name = selectedInstance?.name
+
                             val instanceDisplayName = if (selectedInstance == null) {
                                 translatedText(stringResource(id = R.string.no_instance))
                             } else if (name.isNullOrBlank()) {
@@ -601,6 +560,7 @@ private fun SidebarCardContent(
                                 fontSize = 11.sp,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
+
                             Text(
                                 text = selectedInstance?.versionId
                                     ?: translatedText(
@@ -669,7 +629,7 @@ fun ActionCard(
 
 @Preview(
     showBackground = true,
-    device = "spec:width=800dp,height=400dp,dpi=420",
+    device = "spec:width=800dp,height=400dp,dpi=420"
 )
 @Composable
 fun MainMenuRevampPreview() {
@@ -684,7 +644,8 @@ fun MainMenuRevampPreview() {
             onEditProfileClick = {},
             onPlayClick = {},
             onVersionSpinnerClick = {},
-            onAccountManagerClick = {},
+            onAccountManagerClick = {}
         )
     }
 }
+```

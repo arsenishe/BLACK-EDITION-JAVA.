@@ -1,4 +1,3 @@
-```kotlin
 package com.ashmeet.hyperlauncher.screens.home
 
 import android.annotation.SuppressLint
@@ -415,7 +414,7 @@ private fun ActionCardsContent(
             ActionCard(
                 modifier = Modifier.fillMaxWidth().height(60.dp),
                 title = translatedText(stringResource(id = R.string.main_install_jar_file)),
-                icon = Icons.Rounded.Add,
+                icon = Icons.Filled.Add,
                 position = CardPosition.MIDDLE,
                 onClick = onInstallJarClick
             )
@@ -472,7 +471,7 @@ private fun SidebarCardContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Логотип BLACK EDITION JAVA вместо аватара.
+            // BLACK EDITION JAVA logo replaces the account avatar.
             Box(
                 modifier = Modifier
                     .size(width = 110.dp, height = 110.dp)
@@ -648,4 +647,3 @@ fun MainMenuRevampPreview() {
         )
     }
 }
-```

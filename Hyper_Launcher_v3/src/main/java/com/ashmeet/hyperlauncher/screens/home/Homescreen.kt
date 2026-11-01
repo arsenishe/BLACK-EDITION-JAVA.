@@ -40,7 +40,6 @@ import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Videocam
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -55,10 +54,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -222,14 +219,15 @@ fun MainMenuFragmentCompose(
     )
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = if (hasBackground) {
-            Color.Transparent
-        } else {
-            MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)
-        },
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(
+                painter = painterResource(id = R.drawable.dragon_background),
+                contentScale = ContentScale.Crop
+            ),
+        color = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
-        tonalElevation = 3.dp
+        tonalElevation = 0.dp
     ) {
         BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
             val isPortrait = maxHeight > maxWidth
@@ -458,11 +456,7 @@ private fun SidebarCardContent(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(32.dp),
-        color = if (hasBackground) {
-            MaterialTheme.colorScheme.surface.copy(alpha = backgroundTransparency)
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
-        },
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.78f),
         tonalElevation = 0.dp
     ) {
         Column(
@@ -471,7 +465,6 @@ private fun SidebarCardContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // BLACK EDITION JAVA logo replaces the account avatar.
             Box(
                 modifier = Modifier
                     .size(width = 110.dp, height = 110.dp)
@@ -494,7 +487,7 @@ private fun SidebarCardContent(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
-                color = Color.Transparent,
+                color = Color(0x55301850),
                 contentColor = MaterialTheme.colorScheme.onSurface
             ) {
                 Row(
@@ -534,7 +527,7 @@ private fun SidebarCardContent(
                                     imageVector = Icons.Default.Home,
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp),
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = Color(0xFFBB86FC)
                                 )
                             }
                         }
@@ -557,7 +550,7 @@ private fun SidebarCardContent(
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 fontSize = 11.sp,
-                                color = MaterialTheme.colorScheme.onSurface
+                                color = Color.White
                             )
 
                             Text(
@@ -566,7 +559,7 @@ private fun SidebarCardContent(
                                         stringResource(id = R.string.version_select_hint)
                                     ),
                                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = Color(0xFFD0B5FF)
                             )
                         }
                     }
@@ -581,7 +574,7 @@ private fun SidebarCardContent(
                                 stringResource(R.string.home_edit_profile)
                             ),
                             modifier = Modifier.size(24.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = Color(0xFFD0B5FF)
                         )
                     }
                 }

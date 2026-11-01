@@ -6,6 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -71,7 +72,6 @@ import com.ashmeet.hyperbackend.authenticator.accounts.Accounts
 import com.ashmeet.hyperbackend.instances.DisplayInstance
 import com.ashmeet.hyperbackend.instances.InstanceIconProvider
 import com.ashmeet.hyperbackend.instances.Instances
-import com.ashmeet.hyperlauncher.components.button.MineButton
 import com.ashmeet.hyperlauncher.extra.ExtraConstants
 import com.ashmeet.hyperlauncher.extra.ExtraCore
 import com.ashmeet.hyperlauncher.extra.ExtraListener
@@ -587,12 +587,33 @@ private fun SidebarCardContent(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                MineButton(
-                    text = translatedText(stringResource(R.string.home_launch)),
+                Surface(
                     onClick = onPlayClick,
-                    modifier = Modifier.weight(1f),
-                    height = 56.dp
-                )
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(58.dp),
+                    shape = RoundedCornerShape(50),
+                    color = Color(0xFF160B24),
+                    contentColor = Color.White,
+                    border = BorderStroke(
+                        width = 2.dp,
+                        color = Color(0xFFBD55FF)
+                    ),
+                    shadowElevation = 14.dp
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "PLAY",
+                            color = Color(0xFFE6C5FF),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 3.sp
+                        )
+                    }
+                }
             }
         }
     }

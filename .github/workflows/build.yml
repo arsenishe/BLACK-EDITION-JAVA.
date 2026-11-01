@@ -48,16 +48,16 @@ jobs:
 
       - name: Rename APK
         run: |
-          APK=$(find Hyper_Launcher_v3/build/outputs/apk -type f -name '*.apk' -print -quit)
+          APK=$(find Hyper_Launcher_v3/build/outputs/apk -type f -iname '*arm64*.apk' -print -quit)
           if [ -z "$APK" ]; then
-            echo "APK not found!"
+            echo "ARM64 APK not found!"
             exit 1
           fi
           mkdir -p dist
-          cp "$APK" dist/BLACK-EDITION-JAVA.apk
+          cp "$APK" dist/BLACK-EDITION-JAVA-ARM64.apk
 
       - name: Save APK
         uses: actions/upload-artifact@v4
         with:
-          name: BLACK-EDITION-APK
-          path: dist/BLACK-EDITION-JAVA.apk
+          name: BLACK-EDITION-ARM64
+          path: dist/BLACK-EDITION-JAVA-ARM64.apk

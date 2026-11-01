@@ -65,6 +65,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -108,15 +109,23 @@ fun MainMenuFragmentCompose(
 ) {
     val context = LocalContext.current
     val isPreview = LocalInspectionMode.current
-    var launcherBgPath by remember { mutableStateOf(LauncherPreferences.PREF_LAUNCHER_BACKGROUND_PATH) }
+    var launcherBgPath by remember {
+        mutableStateOf(LauncherPreferences.PREF_LAUNCHER_BACKGROUND_PATH)
+    }
     val hasBackground = launcherBgPath != null
     val backgroundTransparency = if (hasBackground) 0.5f else 1f
-    var hideActionButtons by remember { mutableStateOf(LauncherPreferences.PREF_HIDE_SIDEBAR) }
+    var hideActionButtons by remember {
+        mutableStateOf(LauncherPreferences.PREF_HIDE_SIDEBAR)
+    }
 
     var selectedInstance by remember {
         mutableStateOf(
             if (isPreview) null
-            else try { Instances.loadSelectedInstance() } catch (_: Exception) { null }
+            else try {
+                Instances.loadSelectedInstance()
+            } catch (_: Exception) {
+                null
+            }
         )
     }
 
@@ -124,13 +133,19 @@ fun MainMenuFragmentCompose(
         DisposableEffect(Unit) {
             val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
                 if (key == "hide_sidebar") {
-                    hideActionButtons = LauncherPreferences.prefs.getBoolean("hide_sidebar", false)
+                    hideActionButtons =
+                        LauncherPreferences.prefs.getBoolean("hide_sidebar", false)
                 }
                 if (key == "launcher_background_path") {
-                    launcherBgPath = LauncherPreferences.prefs.getString("launcher_background_path", null)
+                    launcherBgPath =
+                        LauncherPreferences.prefs.getString("launcher_background_path", null)
                 }
                 if (key == LauncherPreferences.PREF_KEY_CURRENT_INSTANCE) {
-                    selectedInstance = try { Instances.loadSelectedInstance() } catch (_: Exception) { null }
+                    selectedInstance = try {
+                        Instances.loadSelectedInstance()
+                    } catch (_: Exception) {
+                        null
+                    }
                 }
             }
             LauncherPreferences.prefs.registerOnSharedPreferenceChangeListener(listener)
@@ -142,7 +157,11 @@ fun MainMenuFragmentCompose(
 
     SideEffect {
         if (!isPreview) {
-            val instance = try { Instances.loadSelectedInstance() } catch (_: Exception) { null }
+            val instance = try {
+                Instances.loadSelectedInstance()
+            } catch (_: Exception) {
+                null
+            }
             if (selectedInstance != instance) {
                 selectedInstance = instance
             }
@@ -161,10 +180,16 @@ fun MainMenuFragmentCompose(
             false
         }
 
-        ExtraCore.addExtraListener(ExtraConstants.REFRESH_ACCOUNT_SPINNER, accountListener)
+        ExtraCore.addExtraListener(
+            ExtraConstants.REFRESH_ACCOUNT_SPINNER,
+            accountListener
+        )
 
         onDispose {
-            ExtraCore.removeExtraListenerFromValue(ExtraConstants.REFRESH_ACCOUNT_SPINNER, accountListener)
+            ExtraCore.removeExtraListenerFromValue(
+                ExtraConstants.REFRESH_ACCOUNT_SPINNER,
+                accountListener
+            )
         }
     }
 
@@ -191,7 +216,11 @@ fun MainMenuFragmentCompose(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = if (hasBackground) Color.Transparent else MaterialTheme.colorScheme.surface.copy(alpha = 0.1f),
+        color = if (hasBackground) {
+            Color.Transparent
+        } else {
+            MaterialTheme.colorScheme.surface.copy(alpha = 0.1f)
+        },
         contentColor = MaterialTheme.colorScheme.onBackground,
         tonalElevation = 3.dp
     ) {
@@ -227,6 +256,7 @@ fun MainMenuFragmentCompose(
                             onOpenFilesClick = onOpenFilesClick
                         )
                     }
+
                     SidebarCardContent(
                         modifier = Modifier.fillMaxWidth(),
                         hasBackground = hasBackground,
@@ -245,10 +275,7 @@ fun MainMenuFragmentCompose(
                     )
                 }
             } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
+                Box(modifier = Modifier.fillMaxSize()) {
                     Row(
                         modifier = Modifier
                             .fillMaxSize()
@@ -256,6 +283,7 @@ fun MainMenuFragmentCompose(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         val rightSidebarWidth = 260.dp
+
                         if (!hideActionButtons) {
                             Column(
                                 modifier = Modifier
@@ -323,8 +351,7 @@ private fun ActionCardsContent(
 ) {
     if (!hideActionButtons) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             ActionCard(
@@ -345,7 +372,6 @@ private fun ActionCardsContent(
                 position = CardPosition.MIDDLE,
                 onClick = onSocialMediaClick
             )
-
             ActionCard(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -437,8 +463,11 @@ private fun SidebarCardContent(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(32.dp),
-        color = if (hasBackground) MaterialTheme.colorScheme.surface.copy(alpha = backgroundTransparency)
-                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
+        color = if (hasBackground) {
+            MaterialTheme.colorScheme.surface.copy(alpha = backgroundTransparency)
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
+        },
         tonalElevation = 0.dp,
     ) {
         Column(
@@ -447,6 +476,16 @@ private fun SidebarCardContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+
+            // Логотип BLACK EDITION JAVA
+            Image(
+                painter = painterResource(id = R.drawable.black_edition_logo),
+                contentDescription = "BLACK EDITION JAVA",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(110.dp),
+                contentScale = ContentScale.Fit
+            )
 
             if (showHead) {
                 Column(
@@ -483,7 +522,9 @@ private fun SidebarCardContent(
                         } else {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = translatedText(stringResource(R.string.home_add_account)),
+                                contentDescription = translatedText(
+                                    stringResource(R.string.home_add_account)
+                                ),
                                 modifier = Modifier.size(32.dp),
                                 tint = MaterialTheme.colorScheme.primary
                             )
@@ -500,7 +541,12 @@ private fun SidebarCardContent(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(start = 12.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
+                        .padding(
+                            start = 12.dp,
+                            end = 6.dp,
+                            top = 6.dp,
+                            bottom = 6.dp
+                        ),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
@@ -556,7 +602,10 @@ private fun SidebarCardContent(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                text = selectedInstance?.versionId ?: translatedText(stringResource(id = R.string.version_select_hint)),
+                                text = selectedInstance?.versionId
+                                    ?: translatedText(
+                                        stringResource(id = R.string.version_select_hint)
+                                    ),
                                 style = MaterialTheme.typography.bodySmall.copy(fontSize = 9.sp),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -569,7 +618,9 @@ private fun SidebarCardContent(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Settings,
-                            contentDescription = translatedText(stringResource(R.string.home_edit_profile)),
+                            contentDescription = translatedText(
+                                stringResource(R.string.home_edit_profile)
+                            ),
                             modifier = Modifier.size(24.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -587,8 +638,7 @@ private fun SidebarCardContent(
                 MineButton(
                     text = translatedText(stringResource(R.string.home_launch)),
                     onClick = onPlayClick,
-                    modifier = Modifier
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     height = 56.dp
                 )
             }

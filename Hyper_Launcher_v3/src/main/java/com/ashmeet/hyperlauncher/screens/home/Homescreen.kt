@@ -137,7 +137,10 @@ fun MainMenuFragmentCompose(
 
                 if (key == "launcher_background_path") {
                     launcherBgPath =
-                        LauncherPreferences.prefs.getString("launcher_background_path", null)
+                        LauncherPreferences.prefs.getString(
+                            "launcher_background_path",
+                            null
+                        )
                 }
 
                 if (key == LauncherPreferences.PREF_KEY_CURRENT_INSTANCE) {
@@ -207,6 +210,7 @@ fun MainMenuFragmentCompose(
     }
 
     val headInteractionSource = remember { MutableInteractionSource() }
+
     val isHeadPressed by headInteractionSource.collectIsPressedAsState()
 
     val headScale by animateFloatAsState(
@@ -249,7 +253,7 @@ fun MainMenuFragmentCompose(
                     ) {
                         ActionCardsContent(
                             hideActionButtons = hideActionButtons,
-                            isPortrait = isPortrait,
+                            isPortrait = true,
                             onAboutClick = onAboutClick,
                             onSocialMediaClick = onSocialMediaClick,
                             onCustomControlsClick = onCustomControlsClick,
@@ -280,58 +284,44 @@ fun MainMenuFragmentCompose(
                     )
                 }
             } else {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    Row(
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    SidebarCardContent(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        val rightSidebarWidth = 260.dp
+                            .width(300.dp)
+                            .fillMaxHeight(),
+                        hasBackground = hasBackground,
+                        backgroundTransparency = backgroundTransparency,
+                        headScale = headScale,
+                        headInteractionSource = headInteractionSource,
+                        currentAccount = currentAccount,
+                        skinHead = skinHead,
+                        instanceIcon = instanceIcon,
+                        selectedInstance = selectedInstance,
+                        onAccountManagerClick = onAccountManagerClick,
+                        onVersionSpinnerClick = onVersionSpinnerClick,
+                        onEditProfileClick = onEditProfileClick,
+                        onPlayClick = onPlayClick
+                    )
 
-                        if (!hideActionButtons) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                                    .padding(end = 8.dp)
-                                    .verticalScroll(rememberScrollState()),
-                                verticalArrangement = Arrangement.spacedBy(4.dp)
-                            ) {
-                                ActionCardsContent(
-                                    hideActionButtons = hideActionButtons,
-                                    isPortrait = isPortrait,
-                                    onAboutClick = onAboutClick,
-                                    onSocialMediaClick = onSocialMediaClick,
-                                    onCustomControlsClick = onCustomControlsClick,
-                                    onContentInstallerClick = onContentInstallerClick,
-                                    onInstanceDirectoryClick = onInstanceDirectoryClick,
-                                    onRecordingsGalleryClick = onRecordingsGalleryClick,
-                                    onInstallJarClick = onInstallJarClick,
-                                    onShareLogsClick = onShareLogsClick,
-                                    onOpenFilesClick = onOpenFilesClick
-                                )
-                            }
-                        } else {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-
-                        SidebarCardContent(
+                    if (!hideActionButtons) {
+                        ActionGridContent(
                             modifier = Modifier
-                                .width(rightSidebarWidth)
+                                .weight(1f)
                                 .fillMaxHeight(),
-                            hasBackground = hasBackground,
-                            backgroundTransparency = backgroundTransparency,
-                            headScale = headScale,
-                            headInteractionSource = headInteractionSource,
-                            currentAccount = currentAccount,
-                            skinHead = skinHead,
-                            instanceIcon = instanceIcon,
-                            selectedInstance = selectedInstance,
-                            onAccountManagerClick = onAccountManagerClick,
-                            onVersionSpinnerClick = onVersionSpinnerClick,
-                            onEditProfileClick = onEditProfileClick,
-                            onPlayClick = onPlayClick
+                            onAboutClick = onAboutClick,
+                            onSocialMediaClick = onSocialMediaClick,
+                            onCustomControlsClick = onCustomControlsClick,
+                            onContentInstallerClick = onContentInstallerClick,
+                            onInstanceDirectoryClick = onInstanceDirectoryClick,
+                            onRecordingsGalleryClick = onRecordingsGalleryClick,
+                            onInstallJarClick = onInstallJarClick,
+                            onShareLogsClick = onShareLogsClick,
+                            onOpenFilesClick = onOpenFilesClick
                         )
                     }
                 }
@@ -369,7 +359,7 @@ private fun ActionCardsContent(
 
             ActionCard(
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                title = translatedText(stringResource(id = R.string.mcl_button_social_media)),
+                title = translatedText(stringResource(R.string.mcl_button_social_media)),
                 icon = Icons.Rounded.Share,
                 position = CardPosition.MIDDLE,
                 onClick = onSocialMediaClick
@@ -377,7 +367,7 @@ private fun ActionCardsContent(
 
             ActionCard(
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                title = translatedText(stringResource(id = R.string.mcl_option_customcontrol)),
+                title = translatedText(stringResource(R.string.mcl_option_customcontrol)),
                 icon = Icons.Rounded.Build,
                 position = CardPosition.MIDDLE,
                 onClick = onCustomControlsClick
@@ -411,7 +401,7 @@ private fun ActionCardsContent(
 
             ActionCard(
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                title = translatedText(stringResource(id = R.string.main_install_jar_file)),
+                title = translatedText(stringResource(R.string.main_install_jar_file)),
                 icon = Icons.Filled.Add,
                 position = CardPosition.MIDDLE,
                 onClick = onInstallJarClick
@@ -419,7 +409,7 @@ private fun ActionCardsContent(
 
             ActionCard(
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                title = translatedText(stringResource(id = R.string.main_share_logs)),
+                title = translatedText(stringResource(R.string.main_share_logs)),
                 icon = Icons.AutoMirrored.Rounded.Send,
                 position = CardPosition.MIDDLE,
                 onClick = onShareLogsClick
@@ -427,7 +417,108 @@ private fun ActionCardsContent(
 
             ActionCard(
                 modifier = Modifier.fillMaxWidth().height(60.dp),
-                title = translatedText(stringResource(id = R.string.mcl_button_open_directory)),
+                title = translatedText(stringResource(R.string.mcl_button_open_directory)),
+                icon = Icons.Rounded.Search,
+                position = CardPosition.BOTTOM,
+                onClick = onOpenFilesClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActionGridContent(
+    modifier: Modifier = Modifier,
+    onAboutClick: () -> Unit,
+    onSocialMediaClick: () -> Unit,
+    onCustomControlsClick: () -> Unit,
+    onContentInstallerClick: () -> Unit,
+    onInstanceDirectoryClick: () -> Unit,
+    onRecordingsGalleryClick: () -> Unit,
+    onInstallJarClick: () -> Unit,
+    onShareLogsClick: () -> Unit,
+    onOpenFilesClick: () -> Unit
+) {
+    Row(
+        modifier = modifier.verticalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.home_about)),
+                icon = Icons.Rounded.Info,
+                position = CardPosition.TOP,
+                onClick = onAboutClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.mcl_button_social_media)),
+                icon = Icons.Rounded.Share,
+                position = CardPosition.MIDDLE,
+                onClick = onSocialMediaClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.mcl_option_customcontrol)),
+                icon = Icons.Rounded.Build,
+                position = CardPosition.MIDDLE,
+                onClick = onCustomControlsClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.home_content_installer)),
+                icon = Icons.Rounded.Download,
+                position = CardPosition.MIDDLE,
+                onClick = onContentInstallerClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.home_instance_directory)),
+                icon = Icons.Rounded.Folder,
+                position = CardPosition.BOTTOM,
+                onClick = onInstanceDirectoryClick
+            )
+        }
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.home_recordings_gallery)),
+                icon = Icons.Rounded.Videocam,
+                position = CardPosition.TOP,
+                onClick = onRecordingsGalleryClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.main_install_jar_file)),
+                icon = Icons.Filled.Add,
+                position = CardPosition.MIDDLE,
+                onClick = onInstallJarClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.main_share_logs)),
+                icon = Icons.AutoMirrored.Rounded.Send,
+                position = CardPosition.MIDDLE,
+                onClick = onShareLogsClick
+            )
+
+            ActionCard(
+                modifier = Modifier.fillMaxWidth().height(60.dp),
+                title = translatedText(stringResource(R.string.mcl_button_open_directory)),
                 icon = Icons.Rounded.Search,
                 position = CardPosition.BOTTOM,
                 onClick = onOpenFilesClick
